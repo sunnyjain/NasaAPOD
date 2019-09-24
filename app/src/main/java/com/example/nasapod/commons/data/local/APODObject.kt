@@ -1,5 +1,9 @@
-package com.example.nasapod.list.vo
+package com.example.nasapod.commons.data.local
 
+import androidx.room.Entity
+
+
+@Entity
 data class APODObject(
 
     val date: String,

@@ -7,13 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.nasapod.R
 import com.example.nasapod.di.Injectable
-import com.example.nasapod.list.vo.APODObject
+import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.navigation.NavigationCallback
 import kotlinx.android.synthetic.main.fragment_podlist_view.*
 import java.lang.ClassCastException
@@ -72,32 +70,136 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
     private fun createMutableList() : MutableList<APODObject> {
         return  mutableListOf(
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-            ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"),
-            APODObject("", "", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
-                ,"","","M1: The Crab Nebula from Hubble", "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg")
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            ),
+            APODObject(
+                "",
+                "",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_3864.jpg"
+                ,
+                "",
+                "",
+                "M1: The Crab Nebula from Hubble",
+                "https://apod.nasa.gov/apod/image/1809/CrabNebula_Hubble_960.jpg"
+            )
         )
 
     }
