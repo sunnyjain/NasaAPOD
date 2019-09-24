@@ -77,4 +77,7 @@ dependencies {
     //subsampling of image.
     implementation 'com.otaliastudios:zoomlayout:1.7.0'
 
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 }
