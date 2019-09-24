@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.example.nasapod"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    def daggerVersion = '2.16'
+    def rxjava = "2.2.1"
+    def rxAndroid = "2.1.0"
+    def commonVersion = "2.1.0"
+    def picassoVersion = "2.71828"
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+
+    implementation 'com.google.android.material:material:1.0.0'
+
+    //di annotation processors
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    //di
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //room persistent lib
+    implementation "androidx.room:room-runtime:$commonVersion"
+    kapt "androidx.room:room-compiler:$commonVersion"
+    androidTestImplementation "androidx.room:room-testing:$commonVersion"
+    implementation "androidx.room:room-rxjava2:$commonVersion"
+
+    implementation "androidx.lifecycle:lifecycle-extensions:$commonVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$commonVersion"
+
+
+    //rx
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
+
+    //stetho
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+
+    //picasso
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
+
+    //new viewpager
+    implementation "androidx.viewpager2:viewpager2:1.0.0-beta04"
+
+    //subsampling of image.
+    implementation 'com.otaliastudios:zoomlayout:1.7.0'
+
+}

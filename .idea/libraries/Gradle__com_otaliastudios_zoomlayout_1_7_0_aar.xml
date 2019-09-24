@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.otaliastudios:zoomlayout:1.7.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9c508ed58a814a645ac2ba44ecff49aa/zoomlayout-1.7.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9c508ed58a814a645ac2ba44ecff49aa/zoomlayout-1.7.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.otaliastudios/zoomlayout/1.7.0/77beccaa43a288653d0b4bd1264b6ffa98fa3c9a/zoomlayout-1.7.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.otaliastudios/zoomlayout/1.7.0/68bba9cd389996e877e335b3a8a3dc328430b42d/zoomlayout-1.7.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
