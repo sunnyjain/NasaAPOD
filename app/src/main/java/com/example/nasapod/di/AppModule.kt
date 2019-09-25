@@ -2,6 +2,9 @@ package com.example.nasapod.di
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
+import com.example.nasapod.commons.data.local.ApodDB
+import com.example.nasapod.commons.data.local.ApodDao
 import com.squareup.picasso.Picasso
 
 import dagger.Module
@@ -19,20 +22,20 @@ class AppModule {
         return application
     }
 
-  /* @Singleton
+   @Singleton
     @Provides
-    fun provideDb(app: Application): Scans {
+    fun provideDb(app: Application): ApodDB {
         return Room
-                .databaseBuilder(app, Scans::class.java, "Scans.db")
+                .databaseBuilder(app, ApodDB::class.java, "Apod.db")
                 .fallbackToDestructiveMigration()
                 .build()
     }
 
     @Singleton
     @Provides
-    fun provideTaskDao(db: Scans): ScansDao {
-        return db.scansDao()
-    }*/
+    fun provideApodDao(db: ApodDB): ApodDao {
+        return db.apodDao()
+    }
 
     @Provides
     fun providesCompositeDisposableBag(): CompositeDisposable{
