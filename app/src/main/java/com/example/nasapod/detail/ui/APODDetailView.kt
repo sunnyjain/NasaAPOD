@@ -22,7 +22,7 @@ import javax.inject.Inject
 class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
     override fun onIdle(engine: ZoomEngine) {
         Log.e("data z ", engine.zoom.toString())
-        Log.e("real zoom", engine.panY)
+
         Log.e("horizontal pan", engine.scaledPanX.toString())
     }
 

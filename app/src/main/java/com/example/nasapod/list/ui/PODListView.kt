@@ -20,7 +20,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-/*EVKE5uRkDPRdHIZwSgirofMweG2MaB6YMuWBgGtn*/
+
 class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListener {
 
     @Inject
