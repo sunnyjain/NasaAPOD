@@ -1,7 +1,9 @@
 package com.example.nasapod
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.nasapod.detail.ui.APODDetailView
 import com.example.nasapod.list.ui.PODListView
@@ -16,7 +18,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
-    var currentVisibleFragment: Fragment? = null
+    private var currentVisibleFragment: Fragment? = null
     var tag: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
 
     override fun onStart() {
         super.onStart()
-        if(currentVisibleFragment == null) {
+        if(currentVisibleFragment == null && tag == null) {
 
             //initial load.
             currentVisibleFragment = PODListView()
@@ -35,6 +37,25 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
                 .add(R.id.mainNavFragment, currentVisibleFragment!!, tag!!)
                 .addToBackStack(tag)
                 .commit()
+        } else {
+            loadFragment()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("fragmentLoaded", tag)
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        tag = savedInstanceState.getString("fragmentLoaded", null)
+        when(tag) {
+            PODListView::class.java.simpleName -> currentVisibleFragment = PODListView()
+            APODDetailView::class.java.simpleName -> {
+                val args = Bundle(1)
+                args.putInt("position", 0)
+                currentVisibleFragment = APODDetailView.newInstance(args)
+            }
         }
     }
 
