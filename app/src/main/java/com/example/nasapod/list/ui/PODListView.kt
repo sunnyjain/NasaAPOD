@@ -3,17 +3,27 @@ package com.example.nasapod.list.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.nasapod.R
 import com.example.nasapod.di.Injectable
 import com.example.nasapod.commons.data.local.APODObject
+import com.example.nasapod.list.viewmodel.APODListViewModel
 import com.example.nasapod.navigation.NavigationCallback
+import com.example.nasapod.networking.Outcome
+import com.example.nasapod.viewmodel.NasaPODViewModelFactory
+import com.example.nasapod.viewmodel.NasaPODViewModelFactory_Factory
 import kotlinx.android.synthetic.main.fragment_podlist_view.*
+import java.io.IOException
 import java.lang.ClassCastException
 import javax.inject.Inject
 
@@ -26,7 +36,14 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
     @Inject
     lateinit var adapter: APODListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: NasaPODViewModelFactory
+
     private var callback: NavigationCallback? = null
+
+    private val viewModel: APODListViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(APODListViewModel::class.java)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,8 +68,24 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
         apod_list_view.layoutManager = GridLayoutManager(view.context, 2)
         adapter.clickListener = this
         apod_list_view.adapter = adapter
-        adapter.apods = createMutableList()
-        adapter.notifyDataSetChanged()
+        apod_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                val lastVisibleItem = (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+
+                //5 is the minimum threshold, it will load more records as soon as user reaches last 3
+                Log.e("vals", totalItemCount.toString().plus("\t").plus(lastVisibleItem + 3))
+                if(!refreshLay.isRefreshing && totalItemCount < (lastVisibleItem + 3)) {
+                    viewModel.loadMore()
+                }
+            }
+        })
+        refreshLay.setOnRefreshListener { viewModel.refreshAPODs() }
+
+        viewModel.getAPODs()
+        initiateDataListener()
+
     }
 
     override fun onAPODItemClick(obj: APODObject, position: Int) {
@@ -60,6 +93,40 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
         val bundle = Bundle(1)
         bundle.putInt("position", position)
         callback?.onSelect(1, bundle)
+    }
+
+    private fun initiateDataListener() {
+        //Observe the outcome and update state of the screen  accordingly
+        viewModel.apodListFetchOutcome.observe(this, Observer<Outcome<List<APODObject>>> { outcome ->
+            Log.d("List View", "initiateDataListener: $outcome")
+            when (outcome) {
+
+                is Outcome.Progress -> refreshLay.isRefreshing = outcome.loading
+
+                is Outcome.Success -> {
+                    Log.d("ListView", "initiateDataListener: Successfully loaded data")
+                    adapter.apods = outcome.data.toMutableList()
+                    adapter.notifyDataSetChanged()
+                }
+
+                is Outcome.Failure -> {
+
+                    if (outcome.e is IOException)
+                        Toast.makeText(
+                            context,
+                            "Internet Required",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    else
+                        Toast.makeText(
+                            context,
+                            "Something Went Wrong",
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
+
+            }
+        })
     }
 
     override fun onDetach() {
