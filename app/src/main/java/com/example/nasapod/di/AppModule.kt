@@ -49,4 +49,7 @@ class AppModule {
         return Picasso.get()
     }
 
+    @Provides
+    @Singleton
+    fun providesApodService(retrofit: Retrofit) = retrofit.create(ApodService::class.java)
 }
