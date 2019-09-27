@@ -1,25 +1,21 @@
 package com.example.nasapod.di
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.nasapod.list.viewmodel.APODListViewModel
 import com.example.nasapod.viewmodel.NasaPODViewModelFactory
 import dagger.Binds
 import dagger.Module
+import dagger.multibindings.IntoMap
 
 @Suppress("unused")
 @Module
 abstract class ViewModelModule {
 
-
-/*    @Binds
-    @IntoMap
-    @ViewModelKey(ScannerPageViewModel::class)
-    abstract fun bindTaskListViewModel(taskListViewModel: ScannerPageViewModel): ViewModel*/
-/*
     @Binds
     @IntoMap
-    @ViewModelKey(AddTaskViewModel::class)
-    abstract fun bindAddTaskListViewModel(addTaskViewModel: AddTaskViewModel): ViewModel
-*/
+    @ViewModelKey(APODListViewModel::class)
+    abstract fun bindApodListViewModel(apodListViewModel: APODListViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: NasaPODViewModelFactory): ViewModelProvider.Factory
