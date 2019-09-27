@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refreshLay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".list.ui.PODListView">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/apod_list_view"
@@ -11,4 +14,4 @@
         android:layout_height="match_parent"
         android:paddingRight="8dp"/>
 
-</FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout >

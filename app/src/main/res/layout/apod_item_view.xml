@@ -7,26 +7,34 @@
     android:layout_marginTop="8dp"
     android:orientation="vertical">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="220dp"
         >
 
         <ImageView
             android:id="@+id/apod_img"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:contentDescription="test"
             android:visibility="visible"
-            android:contentDescription="test" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/apod_title"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/apod_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:gravity="center"
             android:padding="8dp"
-            android:layout_gravity="bottom"
-            android:text="Title of the APOD" />
-    </FrameLayout>
+            android:minLines="2"
+            android:text="Title of the APOD"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
