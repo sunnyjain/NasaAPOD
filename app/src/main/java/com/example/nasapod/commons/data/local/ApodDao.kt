@@ -22,4 +22,7 @@ interface ApodDao {
 
     @Query("SELECT id FROM APODObject ORDER BY id DESC LIMIT 1")
     fun getLastRecordId(): Single<Long>
+
+    @Query("SELECT * FROM APODObject where date = :date")
+    fun getAPODObject(date: String): Single<APODObject>
 }
