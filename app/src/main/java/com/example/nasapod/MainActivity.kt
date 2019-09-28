@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
     override fun onBackPressed() {
         super.onBackPressed()
 
-        if (supportFragmentManager.backStackEntryCount <= 1) {
+        if (supportFragmentManager.backStackEntryCount < 1) {
             finish()
         }
 
