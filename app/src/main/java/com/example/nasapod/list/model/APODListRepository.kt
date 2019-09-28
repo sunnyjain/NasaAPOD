@@ -31,7 +31,7 @@ class APODListRepository @Inject constructor(
 
     override fun updateStartAndEndIndexes() {
         fetchApodListOutCome.loading(true)
-        return localData.getLastRecordId()
+        localData.getLastRecordId()
             .performOnBackOutOnMain(scheduler)
             .subscribe({
                 //update the values accordingly from here
