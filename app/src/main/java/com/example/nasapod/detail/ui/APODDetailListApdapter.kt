@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasapod.R
+
 import com.example.nasapod.commons.data.local.APODObject
 import com.otaliastudios.zoom.ZoomEngine
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_detail_view.view.*
 import javax.inject.Inject
+import com.squareup.picasso.Callback
+import java.lang.Exception
 
 
 class APODDetailListApdapter @Inject constructor(private val picasso: Picasso, private val apodDetailView: APODDetailView)
@@ -38,11 +41,24 @@ class APODDetailListApdapter @Inject constructor(private val picasso: Picasso, p
         }
 
         fun bind(item: APODObject, picasso: Picasso) {
-
-
+            itemView.progressBar.visibility = View.VISIBLE
             picasso.load(item.hdurl)
                 .centerCrop().fit()
-                .into(itemView.apod_img)
+                .into(itemView.apod_img, object : Callback {
+                    override fun onSuccess() {
+                        itemView.progressBar.visibility = View.GONE
+                    }
+                    override fun onError(e: Exception?) {
+                        itemView.progressBar.visibility = View.GONE
+                        picasso.load(item.tileImageUrl)
+                            .centerCrop()
+                            .fit()
+                            .into(itemView.apod_img)
+                    }
+
+                })
+
+            itemView.apod_title.text = item.title
         }
     }
 }
