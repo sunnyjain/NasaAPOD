@@ -11,14 +11,20 @@ import javax.inject.Inject
 
 class APODListLocalData @Inject constructor(private val apodDB: ApodDB, private val scheduler: Scheduler) : APODListDataContract.Local {
 
+    override fun getLastRecordId(): Single<Long> {
+        return apodDB.apodDao().getLastRecordId()
+    }
+
 
     override fun getMinDateAvailable(): Single<String> {
         return apodDB.apodDao().getMinDateAvailable()
     }
 
-    override fun getAPODList(): Flowable<List<APODObject>> {
-        return apodDB.apodDao().getAPODList()
+    override fun getAPODList(startIndex: Long, endIndex: Long): Flowable<List<APODObject>> {
+        return apodDB.apodDao().getAPODList(startIndex, endIndex)
     }
+
+
 
     override fun saveAPODList(apods: List<APODObject>) {
         Completable.fromAction {

@@ -1,6 +1,7 @@
 package com.example.nasapod.list.viewmodel
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.nasapod.commons.data.local.APODObject
@@ -27,9 +28,10 @@ class APODListViewModel @Inject constructor(
 
     fun getAPODs() {
         if (apodListFetchOutcome.value == null) {
-            repository.fetchAPODList()
+            repository.fetchAPODList() //first 20 records
         }
     }
+
 
     fun refreshAPODs() {
         if (FetchIt.shouldFetchAPODList()) {
@@ -58,7 +60,7 @@ class APODListViewModel @Inject constructor(
     }
 
     fun loadMore() {
-        repository.loadMoreData()
+        repository.updateStartAndEndIndexes()
     }
 
     override fun onCleared() {

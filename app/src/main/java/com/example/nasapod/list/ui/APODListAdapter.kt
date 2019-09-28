@@ -1,5 +1,6 @@
 package com.example.nasapod.list.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 class APODListAdapter @Inject constructor(private val picasso: Picasso, private val podListView: PODListView): RecyclerView.Adapter<APODListAdapter.ItemHolder>() {
 
-    var apods: MutableList<APODObject> = mutableListOf()
+    var apods: ArrayList<APODObject> = ArrayList()
     var clickListener: APODItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -24,6 +25,12 @@ class APODListAdapter @Inject constructor(private val picasso: Picasso, private 
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.bind(apods[position], picasso)
+    }
+
+    fun updateRecords(newRecs: List<APODObject>) {
+        //testing
+        newRecs.forEach { Log.e("testing record", it.title)}
+        apods.addAll(newRecs)
     }
 
     inner class ItemHolder(itemView: View, private val clickListener: APODItemClickListener?): RecyclerView.ViewHolder(itemView), View.OnClickListener {

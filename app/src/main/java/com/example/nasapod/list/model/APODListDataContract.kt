@@ -13,12 +13,14 @@ interface APODListDataContract {
         fun refereshAPODList(startDate: String, endDate: String)
         fun saveAPODRecords(apods: List<APODObject>)
         fun loadMoreData()
+        fun updateStartAndEndIndexes()
         fun handleError(error: Throwable)
     }
 
     interface Local {
-        fun getAPODList(): Flowable<List<APODObject>>
+        fun getAPODList(startIndex: Long, endIndex: Long): Flowable<List<APODObject>>
         fun getMinDateAvailable(): Single<String>
+        fun getLastRecordId(): Single<Long>
         fun saveAPODList(apods: List<APODObject>)
     }
 

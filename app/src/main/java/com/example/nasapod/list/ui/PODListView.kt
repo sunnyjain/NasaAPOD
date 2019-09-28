@@ -41,6 +41,9 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
     private var callback: NavigationCallback? = null
 
+    private var totalItemCount: Int = 0
+    private var lastVisibleItem: Int = 0
+
     private val viewModel: APODListViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(APODListViewModel::class.java)
     }
@@ -71,12 +74,11 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
         apod_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
-                val lastVisibleItem = (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+                totalItemCount = recyclerView.layoutManager?.itemCount ?: 0
+                lastVisibleItem = (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
 
-                //5 is the minimum threshold, it will load more records as soon as user reaches last 3
-                Log.e("vals", totalItemCount.toString().plus("\t").plus(lastVisibleItem + 3))
                 if(!refreshLay.isRefreshing && totalItemCount < (lastVisibleItem + 3)) {
+                    //loads more 20 records.
                     viewModel.loadMore()
                 }
             }
@@ -90,9 +92,10 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
     override fun onAPODItemClick(obj: APODObject, position: Int) {
        //notify the activity to load the fragment.
-        val bundle = Bundle(1)
+        Log.e("value clicked", obj.title)
+        /*val bundle = Bundle(1)
         bundle.putInt("position", position)
-        callback?.onSelect(1, bundle)
+        callback?.onSelect(1, bundle)*/
     }
 
     private fun initiateDataListener() {
@@ -105,7 +108,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
                 is Outcome.Success -> {
                     Log.d("ListView", "initiateDataListener: Successfully loaded data")
-                    adapter.apods = outcome.data.toMutableList()
+                    adapter.updateRecords(outcome.data)
                     adapter.notifyDataSetChanged()
                 }
 
@@ -135,7 +138,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
     }
 
 
-    private fun createMutableList() : MutableList<APODObject> {
+   /* private fun createMutableList() : MutableList<APODObject> {
         return  mutableListOf(
             APODObject(
                 "",
@@ -269,5 +272,5 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
             )
         )
 
-    }
+    }*/
 }
