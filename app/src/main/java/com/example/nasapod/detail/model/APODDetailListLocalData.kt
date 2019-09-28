@@ -4,6 +4,7 @@ import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.commons.data.local.ApodDB
 import com.example.nasapod.networking.Scheduler
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class APODDetailListLocalData @Inject constructor(
         return apodDB.apodDao().getAPODObject(date)
     }
 
-    override fun getAPODList(startIndex: Long, endIndex: Long): Flowable<List<APODObject>> {
+    override fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>> {
         return apodDB.apodDao().getAPODList(startIndex, endIndex)
     }
 

@@ -3,6 +3,7 @@ package com.example.nasapod.detail.model
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.networking.Outcome
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
@@ -16,7 +17,7 @@ interface APODDEtailListDataContract {
     }
 
     interface Local {
-        fun getAPODList(startIndex: Long, endIndex: Long): Flowable<List<APODObject>>
+        fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>>
         fun getAPODObject(date: String): Single<APODObject>
     }
 

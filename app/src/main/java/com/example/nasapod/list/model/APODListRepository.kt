@@ -35,8 +35,8 @@ class APODListRepository @Inject constructor(
             .performOnBackOutOnMain(scheduler)
             .subscribe({
                 //update the values accordingly from here
-                if (it >= endIndex) {
-                    startIndex = endIndex
+                if (it > endIndex) {
+                    startIndex = endIndex + 1
                     this.endIndex += 20L
                     fetchAPODList()
                 } else {
@@ -56,14 +56,12 @@ class APODListRepository @Inject constructor(
         fetchApodListOutCome.loading(true)
         localData.getAPODList(startIndex, endIndex)
             .performOnBackOutOnMain(scheduler)
-            .doAfterNext {
+            .doAfterSuccess {
                 if (it.isEmpty()) {
-                    //it means either the list is coming empty because it has successfully populated all the records
-                    //and now it wants to fetch records from the server.
                     if (FetchIt.shouldFetchAPODList()) {
                         //load records for first time.
                         val calendar = Calendar.getInstance()
-                        calendar.add(Calendar.DAY_OF_YEAR, -1) //this is just incase
+                        calendar.add(Calendar.DAY_OF_YEAR, -1)
 
                         val lastFetchedDate = sharedPres.getString(
                             LAST_FETCH_DATE,
@@ -82,15 +80,12 @@ class APODListRepository @Inject constructor(
                             ).format(calendar.time), lastFetchedDate
                         )
                     }
+                    fetchApodListOutCome.loading(false)
+                } else {
+                    fetchApodListOutCome.success(it)
                 }
             }
-            .subscribe({ apodList ->
-                if (apodList.isNotEmpty()) { //no records found
-                    fetchApodListOutCome.success(apodList)
-                } else {
-                    fetchApodListOutCome.loading(false)
-                }
-
+            .subscribe({
             }, { error -> handleError(error) })
             .addTo(compositeDisposable)
     }
@@ -104,17 +99,28 @@ class APODListRepository @Inject constructor(
             API_KEY, startDate, endDate
         )
             .performOnBackOutOnMain(scheduler)
-            .map {
+            .subscribe({
                 saveAPODRecords(it)
-            }.subscribe({}, {
+            }, {
                 handleError(it)
             }).addTo(compositeDisposable)
-
-
     }
 
     override fun saveAPODRecords(apods: List<APODObject>) {
         localData.saveAPODList(apods)
+            .performOnBackOutOnMain(scheduler)
+            .subscribe({
+                //check condition to understand if the items loaded were first time.
+                if(it.last() > 20) {
+                    updateStartAndEndIndexes()
+                } else {
+                    fetchAPODList()
+                }
+            },{
+                fetchApodListOutCome.failed(it)
+            }).addTo(compositeDisposable)
+
+
     }
 
     override fun loadMoreData() {

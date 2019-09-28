@@ -79,6 +79,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
                 if(!refreshLay.isRefreshing && totalItemCount < (lastVisibleItem + 3)) {
                     //loads more 20 records.
+                    Log.e("reached", "rock bottom")
                     viewModel.loadMore()
                 }
             }
