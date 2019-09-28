@@ -32,7 +32,6 @@ class APODListViewModel @Inject constructor(
         }
     }
 
-
     fun refreshAPODs() {
         if (FetchIt.shouldFetchAPODList()) {
             //actually find the date
