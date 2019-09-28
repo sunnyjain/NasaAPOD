@@ -92,10 +92,9 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
     override fun onAPODItemClick(obj: APODObject, position: Int) {
        //notify the activity to load the fragment.
-        Log.e("value clicked", obj.title)
-        /*val bundle = Bundle(1)
-        bundle.putInt("position", position)
-        callback?.onSelect(1, bundle)*/
+        val bundle = Bundle(1)
+        bundle.putLong("id", obj.id)
+        callback?.onSelect(1, bundle)
     }
 
     private fun initiateDataListener() {
