@@ -17,7 +17,7 @@ class APODListLocalData @Inject constructor(private val apodDB: ApodDB,
                                             private val scheduler: Scheduler
 ,private val compositeDisposable: CompositeDisposable) : APODListDataContract.Local {
 
-    override fun getLastRecordId(): Single<Long> {
+    override fun getLastRecordId(): Single<APODObject> {
         return apodDB.apodDao().getLastRecordId()
     }
 
@@ -26,8 +26,8 @@ class APODListLocalData @Inject constructor(private val apodDB: ApodDB,
         return apodDB.apodDao().getMinDateAvailable()
     }
 
-    override fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>> {
-        return apodDB.apodDao().getAPODList(startIndex, endIndex)
+    override fun getAPODList(startDate: String, endDate: String): Maybe<List<APODObject>> {
+        return apodDB.apodDao().getAPODList(startDate, endDate)
     }
 
 

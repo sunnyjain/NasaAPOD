@@ -10,7 +10,7 @@ import io.reactivex.subjects.PublishSubject
 interface APODDEtailListDataContract {
     interface Repository {
         val fetchAPODDetailListOutcome: PublishSubject<Outcome<List<APODObject>>>
-        fun fetchAPODDetailList(id: Long)
+        fun fetchAPODDetailList(id: Long, direction: Int = -1)
         fun refreshAPOdDetailList(startDate: String, endDAte: String)
         fun loadMoreData()
         fun handleError(error: Throwable)

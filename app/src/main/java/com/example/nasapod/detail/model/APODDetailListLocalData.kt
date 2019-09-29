@@ -18,7 +18,7 @@ class APODDetailListLocalData @Inject constructor(
     }
 
     override fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>> {
-        return apodDB.apodDao().getAPODList(startIndex, endIndex)
+        return apodDB.apodDao().getAPODList("", "")
     }
 
 

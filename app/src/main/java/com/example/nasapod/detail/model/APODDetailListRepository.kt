@@ -1,10 +1,14 @@
 package com.example.nasapod.detail.model
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.extensions.*
 import com.example.nasapod.networking.Outcome
 import com.example.nasapod.networking.Scheduler
+import com.example.nasapod.utils.Constants.BOTH
+import com.example.nasapod.utils.Constants.LEFT
+import com.example.nasapod.utils.Constants.RIGHT
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.text.SimpleDateFormat
@@ -20,17 +24,46 @@ class APODDetailListRepository @Inject constructor(
 
     override val fetchAPODDetailListOutcome = PublishSubject.create<Outcome<List<APODObject>>>()
 
-    override fun fetchAPODDetailList(id: Long) {
+    override fun fetchAPODDetailList(id: Long, direction: Int) {
         fetchAPODDetailListOutcome.loading(true)
-        val startIndex = if( (id - 5) >= 0) id - 5 else 0
-        localData.getAPODList(startIndex, startIndex+10)
-            .performOnBackOutOnMain(scheduler)
-            .subscribe({
-                fetchAPODDetailListOutcome.success(it)
-            },{
-                fetchAPODDetailListOutcome.failed(it)
-            })
-            .addTo(compositeDisposable)
+        Log.e("indexes", id.toString())
+
+        val startIndex =
+            when (direction) {
+                BOTH -> {
+                    if ((id - 5L) >= 1L) (id - 5L) else 1L
+                }
+                RIGHT -> {
+                    id + 1L
+                }
+                LEFT -> {
+                    if ((id - 11L) >= 1L) (id - 11L) else 1L
+                }
+                else -> 1L
+            }
+
+        val endIndex =
+            when (direction) {
+                BOTH, RIGHT -> {
+                    startIndex + 10
+                }
+                LEFT -> {
+                    if (id - 1L >= 1L) id - 1L else 1L
+                }
+                else -> 1L
+            }
+
+        Log.e("indexes",startIndex.toString().plus(" ").plus(endIndex))
+
+        if (startIndex != endIndex)
+            localData.getAPODList(startIndex, endIndex)
+                .performOnBackOutOnMain(scheduler)
+                .subscribe({
+                    fetchAPODDetailListOutcome.successWithDir(it, direction)
+                }, {
+                    fetchAPODDetailListOutcome.failed(it)
+                })
+                .addTo(compositeDisposable)
     }
 
     override fun refreshAPOdDetailList(startDate: String, endDAte: String) {

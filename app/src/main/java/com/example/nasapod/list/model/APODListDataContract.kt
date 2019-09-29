@@ -19,9 +19,9 @@ interface APODListDataContract {
     }
 
     interface Local {
-        fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>>
+        fun getAPODList(startDate: String, endDate: String): Maybe<List<APODObject>>
         fun getMinDateAvailable(): Single<String>
-        fun getLastRecordId(): Single<Long>
+        fun getLastRecordId(): Single<APODObject>
         fun saveAPODList(apods: List<APODObject>): Single<List<Long>>
     }
 

@@ -33,6 +33,13 @@ fun <T> PublishSubject<Outcome<T>>.success(t: T) {
     }
 }
 
+fun <T> PublishSubject<Outcome<T>>.successWithDir(t: T, d: Int) {
+    with(this){
+        loading(false)
+        onNext(Outcome.successWithDirection(t, d))
+    }
+}
+
 
 /**
  * Extension function to push a failed event with an exception to the observing outcome

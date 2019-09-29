@@ -26,23 +26,46 @@ class APODListRepository @Inject constructor(
 ) : APODListDataContract.Repository {
 
 
-    private var startIndex = 1L
-    private var endIndex = 22L
+    private val cal = Calendar.getInstance()
+    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private lateinit var startDate: String
+    private lateinit var endDate: String
+
+
+    /*set this func first*/
+    fun setStartAndEndDate() {
+        cal.add(Calendar.DAY_OF_YEAR, -1)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        endDate = sdf.format(cal.time)
+
+        cal.add(Calendar.DAY_OF_YEAR, -20)
+        startDate = sdf.format(cal.time)
+    }
 
     override fun updateStartAndEndIndexes() {
         fetchApodListOutCome.loading(true)
         localData.getLastRecordId()
             .performOnBackOutOnMain(scheduler)
             .subscribe({
-                //update the values accordingly from here
-                if (it > endIndex) {
-                    startIndex = endIndex + 1
-                    this.endIndex += 20L
+
+                //basically the minimist date available.
+                val lastAvailableDate = sdf.parse(it.date) ?: Date()
+
+                if (lastAvailableDate < sdf.parse(startDate)) {
+                    cal.time = sdf.parse(startDate) ?: Date()
+                    cal.add(Calendar.DAY_OF_YEAR, -1)
+
+                    endDate = sdf.format(cal.time)
+
+                    cal.add(Calendar.DAY_OF_YEAR, -20)
+                    startDate = sdf.format(cal.time)
                     fetchAPODList()
                 } else {
                     loadMoreData()
                 }
-                Log.e("indexes", startIndex.toString().plus(endIndex))
             }, {
                 fetchApodListOutCome.failed(it)
             })
@@ -54,32 +77,15 @@ class APODListRepository @Inject constructor(
 
     override fun fetchAPODList() {
         fetchApodListOutCome.loading(true)
-        localData.getAPODList(startIndex, endIndex)
+        localData.getAPODList(startDate, endDate)
             .performOnBackOutOnMain(scheduler)
             .doAfterSuccess {
                 if (it.isEmpty()) {
                     if (FetchIt.shouldFetchAPODList()) {
                         //load records for first time.
-                        val calendar = Calendar.getInstance()
-                        calendar.add(Calendar.DAY_OF_YEAR, -1)
-
-                        val lastFetchedDate = sharedPres.getString(
-                            LAST_FETCH_DATE,
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(calendar.time)
-                        ) ?: ""
-
-                        calendar.add(Calendar.DAY_OF_YEAR, -20)
-
-                        refereshAPODList(
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(calendar.time), lastFetchedDate
-                        )
+                        refereshAPODList(startDate, endDate)
                     }
+
                     fetchApodListOutCome.loading(false)
                 } else {
                     fetchApodListOutCome.success(it)
@@ -111,7 +117,7 @@ class APODListRepository @Inject constructor(
             .performOnBackOutOnMain(scheduler)
             .subscribe({
                 //check condition to understand if the items loaded were first time.
-                if(it.last() > 20) {
+                if(it.last() > 21) {
                     updateStartAndEndIndexes()
                 } else {
                     fetchAPODList()

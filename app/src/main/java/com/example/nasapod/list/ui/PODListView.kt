@@ -86,6 +86,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
         })
         refreshLay.setOnRefreshListener { viewModel.refreshAPODs() }
 
+        viewModel
         viewModel.getAPODs()
         initiateDataListener()
 

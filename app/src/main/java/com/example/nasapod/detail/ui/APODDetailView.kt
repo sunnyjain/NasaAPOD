@@ -11,12 +11,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.nasapod.R
 import com.example.nasapod.di.Injectable
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.detail.viewmodel.APODDetailListViewModel
 import com.example.nasapod.list.viewmodel.APODListViewModel
 import com.example.nasapod.networking.Outcome
+import com.example.nasapod.utils.Constants.BOTH
+import com.example.nasapod.utils.Constants.LEFT
+import com.example.nasapod.utils.Constants.RIGHT
 import com.example.nasapod.viewmodel.NasaPODViewModelFactory
 import com.otaliastudios.zoom.ZoomEngine
 import kotlinx.android.synthetic.main.fragment_apoddetail_view.*
@@ -30,8 +35,8 @@ import javax.inject.Inject
  */
 class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
     override fun onIdle(engine: ZoomEngine) {
-        Log.e("data z ", engine.zoom.toString())
-        Log.e("horizontal pan", engine.scaledPanX.toString())
+        //Log.e("data z ", engine.zoom.toString())
+        //Log.e("horizontal pan", engine.scaledPanX.toString())
     }
 
     override fun onUpdate(engine: ZoomEngine, matrix: Matrix) {
@@ -43,9 +48,6 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
     @Inject
     lateinit var viewModelFactory: NasaPODViewModelFactory
 
-
-    private var totalItemCount: Int = 0
-    private var lastVisibleItem: Int = 0
 
     private val viewModel: APODDetailListViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(APODDetailListViewModel::class.java)
@@ -74,7 +76,17 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
 
         apod_detail_list.adapter = adapter
         adapter.zoomListener = this
-
+        apod_detail_list.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if(adapter.apods.last() == adapter.apods[position]) {
+                    viewModel.getAPODs(adapter.apods[position].id, RIGHT)
+                }
+                if(adapter.apods[0] == adapter.apods[position]) {
+                    viewModel.getAPODs(adapter.apods[position].id, LEFT)
+                }
+            }
+        })
         viewModel.getAPODs(arguments?.getLong("id") ?: 0)
         initiateDataListener()
 
@@ -90,11 +102,22 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
 
                 is Outcome.Success -> {
                     Log.d("ListView", "initiateDataListener: Successfully loaded data")
-                    adapter.apods.addAll(outcome.data)
-                    apod_detail_list.setCurrentItem(
-                        adapter.apods.indexOf(adapter.apods
-                            .find { it.id == arguments?.getLong("id", 0) }), false)
-                    adapter.notifyDataSetChanged()
+                }
+
+                is Outcome.SuccessWithDirection -> {
+                    when(outcome.direction) {
+                        BOTH -> {
+                            adapter.apods.addAll(outcome.data)
+                            apod_detail_list.setCurrentItem(
+                                adapter.apods.indexOf(adapter.apods
+                                    .find { it.id == arguments?.getLong("id", 0) }), false)
+                            adapter.notifyDataSetChanged()
+                        }
+                        RIGHT -> {
+                            adapter.apods.addAll(outcome.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
                 }
 
                 is Outcome.Failure -> {

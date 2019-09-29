@@ -28,6 +28,7 @@ class APODListViewModel @Inject constructor(
 
     fun getAPODs() {
         if (apodListFetchOutcome.value == null) {
+            repository.setStartAndEndDate()
             repository.fetchAPODList() //first 20 records
         }
     }
