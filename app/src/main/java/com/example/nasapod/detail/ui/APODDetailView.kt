@@ -37,9 +37,12 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
     override fun onIdle(engine: ZoomEngine) {
         //Log.e("data z ", engine.zoom.toString())
         //Log.e("horizontal pan", engine.scaledPanX.toString())
+
+        apod_detail_list.isUserInputEnabled = true
     }
 
     override fun onUpdate(engine: ZoomEngine, matrix: Matrix) {
+        apod_detail_list.isUserInputEnabled = false
     }
 
     @Inject
@@ -79,10 +82,10 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
         apod_detail_list.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if(adapter.apods.last() == adapter.apods[position]) {
+                if (adapter.apods.last() == adapter.apods[position]) {
                     viewModel.getAPODs(adapter.apods[position].date, RIGHT)
                 }
-                if(adapter.apods[0] == adapter.apods[position]) {
+                if (adapter.apods[0] == adapter.apods[position]) {
                     viewModel.getAPODs(adapter.apods[position].date, LEFT)
                 }
             }
@@ -94,55 +97,60 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
 
     private fun initiateDataListener() {
         //Observe the outcome and update state of the screen  accordingly
-        viewModel.apodListFetchOutcome.observe(this, Observer<Outcome<List<APODObject>>> { outcome ->
-            Log.d("List View", "initiateDataListener: $outcome")
-            when (outcome) {
+        viewModel.apodListFetchOutcome.observe(
+            this,
+            Observer<Outcome<List<APODObject>>> { outcome ->
+                Log.d("List View", "initiateDataListener: $outcome")
+                when (outcome) {
 
-                is Outcome.Progress ->  Log.d("Loading", "loading")
+                    is Outcome.Progress -> Log.d("Loading", "loading")
 
-                is Outcome.Success -> {
-                    Log.d("ListView", "initiateDataListener: Successfully loaded data")
-                }
-
-                is Outcome.SuccessWithDirection -> {
-                    when(outcome.direction) {
-                        BOTH -> {
-                            adapter.apods.addAll(outcome.data)
-                            apod_detail_list.setCurrentItem(
-                                adapter.apods.indexOf(adapter.apods
-                                    .find { it.date == arguments?.getString("date", "") }), false)
-                            adapter.notifyDataSetChanged()
-                        }
-                        RIGHT -> {
-                            adapter.apods.addAll(outcome.data)
-                            adapter.notifyDataSetChanged()
-                        }
-                        LEFT -> {
-                            for (apodObject in outcome.data.reversed()) {
-                                adapter.apods.add(0, apodObject)
+                    is Outcome.SuccessWithDirection -> {
+                        when (outcome.direction) {
+                            BOTH -> {
+                                adapter.apods.addAll(outcome.data)
+                                apod_detail_list.setCurrentItem(
+                                    adapter.apods.indexOf(adapter.apods
+                                        .find { it.date == arguments?.getString("date", "") }),
+                                    false
+                                )
+                                adapter.notifyDataSetChanged()
                             }
-                            adapter.notifyDataSetChanged()
+                            RIGHT -> {
+                                adapter.apods.addAll(outcome.data)
+                                adapter.notifyDataSetChanged()
+                            }
+                            LEFT -> {
+                                //seems like a hack
+                                val firstElementRecord = adapter.apods[0]
+                                for (apodObject in outcome.data.reversed()) {
+                                    adapter.apods.add(0, apodObject)
+                                }
+                                //move to the last position you were in.
+                                apod_detail_list.setCurrentItem((adapter.apods.indexOf(adapter.apods
+                                    .find { it.date == firstElementRecord.date })), false)
+                                adapter.notifyDataSetChanged()
+                            }
                         }
                     }
+
+                    is Outcome.Failure -> {
+
+                        if (outcome.e is IOException)
+                            Toast.makeText(
+                                context,
+                                "Internet Required",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        else
+                            Toast.makeText(
+                                context,
+                                "Something Went Wrong",
+                                Toast.LENGTH_LONG
+                            ).show()
+                    }
+
                 }
-
-                is Outcome.Failure -> {
-
-                    if (outcome.e is IOException)
-                        Toast.makeText(
-                            context,
-                            "Internet Required",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    else
-                        Toast.makeText(
-                            context,
-                            "Something Went Wrong",
-                            Toast.LENGTH_LONG
-                        ).show()
-                }
-
-            }
-        })
+            })
     }
 }
