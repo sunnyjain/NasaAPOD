@@ -79,14 +79,12 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
 
                 if(!refreshLay.isRefreshing && totalItemCount < (lastVisibleItem + 3)) {
                     //loads more 20 records.
-                    Log.e("reached", "rock bottom")
                     viewModel.loadMore()
                 }
             }
         })
         refreshLay.setOnRefreshListener { viewModel.refreshAPODs() }
 
-        viewModel
         viewModel.getAPODs()
         initiateDataListener()
 
@@ -124,7 +122,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
                     else
                         Toast.makeText(
                             context,
-                            "Something Went Wrong",
+                            "Something Went Wrong".plus(outcome.e.localizedMessage),
                             Toast.LENGTH_LONG
                         ).show()
                 }
