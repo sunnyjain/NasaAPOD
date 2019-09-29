@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [APODObject::class], version = 3, exportSchema =  false)
+@Database(entities = [APODObject::class], version = 5, exportSchema =  false)
 abstract class ApodDB : RoomDatabase() {
     abstract fun apodDao(): ApodDao
 }
