@@ -95,7 +95,7 @@ class PODListView : Fragment(), Injectable, APODListAdapter.APODItemClickListene
     override fun onAPODItemClick(obj: APODObject, position: Int) {
        //notify the activity to load the fragment.
         val bundle = Bundle(1)
-        bundle.putLong("id", obj.id)
+        bundle.putString("date", obj.date)
         callback?.onSelect(1, bundle)
     }
 

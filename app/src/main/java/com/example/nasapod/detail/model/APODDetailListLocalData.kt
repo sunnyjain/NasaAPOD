@@ -17,8 +17,8 @@ class APODDetailListLocalData @Inject constructor(
         return apodDB.apodDao().getAPODObject(date)
     }
 
-    override fun getAPODList(startIndex: Long, endIndex: Long): Maybe<List<APODObject>> {
-        return apodDB.apodDao().getAPODList("", "")
+    override fun getAPODList(startDate: String, endDate: String): Maybe<List<APODObject>> {
+        return apodDB.apodDao().getAPODList(startDate, endDate)
     }
 
 

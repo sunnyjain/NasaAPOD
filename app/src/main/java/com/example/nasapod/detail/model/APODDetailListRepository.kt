@@ -24,36 +24,58 @@ class APODDetailListRepository @Inject constructor(
 
     override val fetchAPODDetailListOutcome = PublishSubject.create<Outcome<List<APODObject>>>()
 
-    override fun fetchAPODDetailList(id: Long, direction: Int) {
+    override fun fetchAPODDetailList(date: String, direction: Int) {
         fetchAPODDetailListOutcome.loading(true)
-        Log.e("indexes", id.toString())
+
+        val calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        calendar.time = sdf.parse(date) ?: Date()
+
+        Log.e("date rceived", date)
 
         val startIndex =
-            when (direction) {
+            when(direction) {
                 BOTH -> {
-                    if ((id - 5L) >= 1L) (id - 5L) else 1L
+                    //get five records left and five on right.
+                    calendar.add(Calendar.DAY_OF_YEAR, -5)
+                    sdf.format(calendar.time)
+                }
+                LEFT -> {
+                    //10 records on the left.
+                    calendar.add(Calendar.DAY_OF_YEAR, 1)
+                    sdf.format(calendar.time)
                 }
                 RIGHT -> {
-                    id + 1L
+                    //10 records on the right.
+                    calendar.add(Calendar.DAY_OF_YEAR, -11)
+                    sdf.format(calendar.time)
                 }
-                LEFT -> {
-                    if ((id - 11L) >= 1L) (id - 11L) else 1L
-                }
-                else -> 1L
+                else -> sdf.format(Date())
             }
+
+        calendar.time = sdf.parse(date) ?: Date() //resetting
 
         val endIndex =
-            when (direction) {
-                BOTH, RIGHT -> {
-                    startIndex + 10
+            when(direction) {
+                BOTH -> {
+                    //get five records left and five on right.
+                    calendar.add(Calendar.DAY_OF_YEAR, 5)
+                    sdf.format(calendar.time)
                 }
                 LEFT -> {
-                    if (id - 1L >= 1L) id - 1L else 1L
+                    //10 records on the left.
+                    calendar.add(Calendar.DAY_OF_YEAR, 11)
+                    sdf.format(calendar.time)
                 }
-                else -> 1L
+                RIGHT -> {
+                    //10 records on the right.
+                    calendar.add(Calendar.DAY_OF_YEAR, -1)
+                    sdf.format(calendar.time)
+                }
+                else -> sdf.format(Date())
             }
 
-        Log.e("indexes",startIndex.toString().plus(" ").plus(endIndex))
+        Log.e("Dates", startIndex.plus(endIndex))
 
         if (startIndex != endIndex)
             localData.getAPODList(startIndex, endIndex)

@@ -80,14 +80,14 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if(adapter.apods.last() == adapter.apods[position]) {
-                    viewModel.getAPODs(adapter.apods[position].id, RIGHT)
+                    viewModel.getAPODs(adapter.apods[position].date, RIGHT)
                 }
                 if(adapter.apods[0] == adapter.apods[position]) {
-                    viewModel.getAPODs(adapter.apods[position].id, LEFT)
+                    viewModel.getAPODs(adapter.apods[position].date, LEFT)
                 }
             }
         })
-        viewModel.getAPODs(arguments?.getLong("id") ?: 0)
+        viewModel.getAPODs(arguments?.getString("date") ?: "")
         initiateDataListener()
 
     }
@@ -110,11 +110,17 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
                             adapter.apods.addAll(outcome.data)
                             apod_detail_list.setCurrentItem(
                                 adapter.apods.indexOf(adapter.apods
-                                    .find { it.id == arguments?.getLong("id", 0) }), false)
+                                    .find { it.date == arguments?.getString("date", "") }), false)
                             adapter.notifyDataSetChanged()
                         }
                         RIGHT -> {
                             adapter.apods.addAll(outcome.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                        LEFT -> {
+                            for (apodObject in outcome.data.reversed()) {
+                                adapter.apods.add(0, apodObject)
+                            }
                             adapter.notifyDataSetChanged()
                         }
                     }

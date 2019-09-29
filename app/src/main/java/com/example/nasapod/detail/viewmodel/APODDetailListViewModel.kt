@@ -24,16 +24,16 @@ class APODDetailListViewModel @Inject constructor(
         repository.fetchAPODDetailListOutcome.toLiveData(compositeDisposable)
     }
 
-    fun getAPODs(id: Long, dir: Int = BOTH) {
+    fun getAPODs(date: String, dir: Int = BOTH) {
         if (apodListFetchOutcome.value == null) {
-            repository.fetchAPODDetailList(id, dir)
+            repository.fetchAPODDetailList(date, dir)
         } else {
-            appendRecords(id, dir)
+            appendRecords(date, dir)
         }
     }
 
-    fun appendRecords(visibleId: Long, direction: Int) {
-        repository.fetchAPODDetailList(visibleId, direction)
+    private fun appendRecords(selectedDate: String, direction: Int) {
+        repository.fetchAPODDetailList(selectedDate, direction)
     }
 
     override fun onCleared() {
