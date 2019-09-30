@@ -38,11 +38,11 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
         //Log.e("data z ", engine.zoom.toString())
         //Log.e("horizontal pan", engine.scaledPanX.toString())
 
-        apod_detail_list.isUserInputEnabled = true
+       
     }
 
     override fun onUpdate(engine: ZoomEngine, matrix: Matrix) {
-        apod_detail_list.isUserInputEnabled = false
+
     }
 
     @Inject
