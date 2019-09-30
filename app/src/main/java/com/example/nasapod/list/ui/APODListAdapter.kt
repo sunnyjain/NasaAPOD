@@ -29,7 +29,6 @@ class APODListAdapter @Inject constructor(private val picasso: Picasso, private 
 
     fun updateRecords(newRecs: List<APODObject>) {
         //testing
-        newRecs.forEach { Log.e("testing record", it.title)}
         apods.addAll(newRecs)
     }
 

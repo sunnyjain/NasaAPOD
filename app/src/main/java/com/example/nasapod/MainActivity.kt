@@ -24,6 +24,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if(savedInstanceState != null) {
+            tag = savedInstanceState.getString("fragmentLoaded", null)
+        }
     }
 
     override fun onStart() {
@@ -37,26 +40,12 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Navigation
                 .add(R.id.mainNavFragment, currentVisibleFragment!!, tag!!)
                 .addToBackStack(tag)
                 .commit()
-        } else {
-            loadFragment()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("fragmentLoaded", tag)
-    }
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        tag = savedInstanceState.getString("fragmentLoaded", null)
-        when(tag) {
-            PODListView::class.java.simpleName -> currentVisibleFragment = PODListView()
-            APODDetailView::class.java.simpleName -> {
-                val args = Bundle(1)
-                args.putInt("position", 0)
-                currentVisibleFragment = APODDetailView.newInstance(args)
-            }
-        }
     }
 
     override fun onBackPressed() {
