@@ -1,7 +1,6 @@
 package com.example.nasapod.detail.ui
 
 
-import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,21 +10,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.nasapod.R
-import com.example.nasapod.di.Injectable
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.detail.viewmodel.APODDetailListViewModel
-import com.example.nasapod.list.viewmodel.APODListViewModel
+import com.example.nasapod.di.Injectable
 import com.example.nasapod.networking.Outcome
 import com.example.nasapod.utils.Constants.BOTH
 import com.example.nasapod.utils.Constants.LEFT
 import com.example.nasapod.utils.Constants.RIGHT
 import com.example.nasapod.viewmodel.NasaPODViewModelFactory
-import com.otaliastudios.zoom.ZoomEngine
 import kotlinx.android.synthetic.main.fragment_apoddetail_view.*
-import kotlinx.android.synthetic.main.fragment_podlist_view.*
 import java.io.IOException
 import javax.inject.Inject
 
@@ -33,17 +28,8 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
-    override fun onIdle(engine: ZoomEngine) {
-        //Log.e("data z ", engine.zoom.toString())
-        //Log.e("horizontal pan", engine.scaledPanX.toString())
+class APODDetailView : Fragment(), Injectable {
 
-       
-    }
-
-    override fun onUpdate(engine: ZoomEngine, matrix: Matrix) {
-
-    }
 
     @Inject
     lateinit var adapter: APODDetailListApdapter
@@ -78,7 +64,7 @@ class APODDetailView : Fragment(), Injectable, ZoomEngine.Listener {
 
 
         apod_detail_list.adapter = adapter
-        adapter.zoomListener = this
+
         apod_detail_list.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

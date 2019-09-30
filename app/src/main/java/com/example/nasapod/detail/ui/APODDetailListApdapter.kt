@@ -1,6 +1,6 @@
 package com.example.nasapod.detail.ui
 
-import android.graphics.Matrix
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,24 +8,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasapod.R
-
 import com.example.nasapod.commons.data.local.APODObject
-import com.otaliastudios.zoom.ZoomEngine
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_detail_view.view.*
 import javax.inject.Inject
-import com.squareup.picasso.Callback
-import java.lang.Exception
 
 
 class APODDetailListApdapter @Inject constructor(private val picasso: Picasso, private val apodDetailView: APODDetailView)
     :RecyclerView.Adapter<APODDetailListApdapter.APODItemViewHolder>() {
 
     var apods: MutableList<APODObject> = mutableListOf()
-    var zoomListener: ZoomEngine.Listener? = null
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = APODItemViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_detail_view, parent, false), zoomListener)
+        LayoutInflater.from(parent.context).inflate(R.layout.item_detail_view, parent, false))
 
     override fun getItemCount() = apods.size
 
@@ -35,11 +32,13 @@ class APODDetailListApdapter @Inject constructor(private val picasso: Picasso, p
     }
 
 
-    inner class APODItemViewHolder(itemView: View, zoomListener: ZoomEngine.Listener?): RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class APODItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
        
 
         init {
-            itemView.apod_img.engine.addListener(zoomListener!!)
+            itemView.apod_img.setOnViewDragListener { dx, dy ->
+                Log.e("drag", dx.toString().plus(" ").plus(dy))
+            }
             itemView.apod_detail_btn.setOnClickListener(this)
             itemView.apod_detail_btn.tag = "ImageView"
         }

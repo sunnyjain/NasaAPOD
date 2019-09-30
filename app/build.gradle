@@ -76,10 +76,10 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picassoVersion"
 
     //new viewpager
-    implementation "androidx.viewpager2:viewpager2:1.0.0-beta04"
+    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
 
-    //subsampling of image.
-    implementation 'com.otaliastudios:zoomlayout:1.7.0'
+    //zommable of image.
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
