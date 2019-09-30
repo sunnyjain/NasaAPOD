@@ -85,8 +85,6 @@ class APODListRepository @Inject constructor(
                         //load records for first time.
                         refereshAPODList(startDate, endDate)
                     }
-
-                    fetchApodListOutCome.loading(false)
                 } else {
                     fetchApodListOutCome.success(it)
                 }
