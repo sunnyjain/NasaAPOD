@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_detail_view.view.*
 import javax.inject.Inject
 
 
-class APODDetailListApdapter @Inject constructor(private val picasso: Picasso, private val apodDetailView: APODDetailView)
+class APODDetailListApdapter @Inject constructor(private val picasso: Picasso)
     :RecyclerView.Adapter<APODDetailListApdapter.APODItemViewHolder>() {
 
     var apods: MutableList<APODObject> = mutableListOf()

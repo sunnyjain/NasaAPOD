@@ -1,6 +1,5 @@
 package com.example.nasapod.list.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.apod_item_view.view.*
 import javax.inject.Inject
 
-class APODListAdapter @Inject constructor(private val picasso: Picasso, private val podListView: PODListView): RecyclerView.Adapter<APODListAdapter.ItemHolder>() {
+class APODListAdapter @Inject constructor(private val picasso: Picasso): RecyclerView.Adapter<APODListAdapter.ItemHolder>() {
 
     var apods: ArrayList<APODObject> = ArrayList()
     var clickListener: APODItemClickListener? = null
