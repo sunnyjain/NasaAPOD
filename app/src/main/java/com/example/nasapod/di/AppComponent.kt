@@ -2,7 +2,6 @@ package com.example.nasapod.di
 
 import android.app.Application
 import com.example.nasapod.Appcontroller
-import com.squareup.picasso.Picasso
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
@@ -13,6 +12,7 @@ import javax.inject.Singleton
 @Component(modules = [AndroidSupportInjectionModule::class,
                       AppModule::class,
                       NetworkModule::class,
+                      RepositoryModule::class,
                       ActivityBuilder::class])
 interface AppComponent {
 

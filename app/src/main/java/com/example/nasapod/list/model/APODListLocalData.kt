@@ -30,8 +30,6 @@ class APODListLocalData @Inject constructor(private val apodDB: ApodDB,
         return apodDB.apodDao().getAPODList(startDate, endDate)
     }
 
-
-
     override fun saveAPODList(apods: List<APODObject>): Single<List<Long>> {
         return apodDB.apodDao().saveAPODs(apods)
     }

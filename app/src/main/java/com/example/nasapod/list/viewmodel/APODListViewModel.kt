@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.extensions.loading
 import com.example.nasapod.extensions.toLiveData
+import com.example.nasapod.list.model.APODListDataContract
 import com.example.nasapod.list.model.APODListRepository
 import com.example.nasapod.networking.FetchIt
 import com.example.nasapod.networking.FetchItKeys.LAST_FETCH_DATE
@@ -17,7 +18,7 @@ import java.util.*
 import javax.inject.Inject
 
 class APODListViewModel @Inject constructor(
-    private val repository: APODListRepository,
+    private val repository: APODListDataContract.Repository,
     private val preferences: SharedPreferences,
     private val compositeDisposable: CompositeDisposable
 ) : ViewModel() {

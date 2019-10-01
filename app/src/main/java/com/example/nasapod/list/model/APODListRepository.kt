@@ -18,11 +18,10 @@ import javax.inject.Inject
 
 
 class APODListRepository @Inject constructor(
-    private val localData: APODListLocalData,
-    private val remoteData: APODListRemoteData,
+    private val localData: APODListDataContract.Local,
+    private val remoteData: APODListDataContract.Remote,
     private val scheduler: Scheduler,
-    private val compositeDisposable: CompositeDisposable,
-    private val sharedPres: SharedPreferences
+    private val compositeDisposable: CompositeDisposable
 ) : APODListDataContract.Repository {
 
 
@@ -33,7 +32,7 @@ class APODListRepository @Inject constructor(
 
 
     /*set this func first*/
-    fun setStartAndEndDate() {
+    override fun setStartAndEndDate() {
         cal.add(Calendar.DAY_OF_YEAR, -1)
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)

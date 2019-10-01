@@ -21,6 +21,7 @@ interface APODDEtailListDataContract {
         fun getAPODObject(date: String): Single<APODObject>
     }
 
+    /*unused for now.*/
     interface Remote {
         fun getAPODList(apiKey: String, startDate: String, endDate: String): Single<APODObject>
     }

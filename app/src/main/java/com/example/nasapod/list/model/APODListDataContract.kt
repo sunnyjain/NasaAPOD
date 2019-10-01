@@ -11,6 +11,7 @@ interface APODListDataContract {
     interface Repository {
         val fetchApodListOutCome: PublishSubject<Outcome<List<APODObject>>>
         fun fetchAPODList()
+        fun setStartAndEndDate()
         fun refereshAPODList(startDate: String, endDate: String)
         fun saveAPODRecords(apods: List<APODObject>)
         fun loadMoreData()
