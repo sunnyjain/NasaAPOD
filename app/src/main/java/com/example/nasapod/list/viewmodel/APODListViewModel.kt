@@ -41,19 +41,19 @@ class APODListViewModel @Inject constructor(
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             val todaysDate =
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-            FetchIt.updateLastFetchDate(calendar.time)
+
             calendar.time = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
                 preferences.getString(
-                    LAST_FETCH_DATE, ""
-                ) ?: ""
+                    LAST_FETCH_DATE, SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                )  ?: ""
             )!!
 
-            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
             val lastFetchDate =
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-
+            FetchIt.updateLastFetchDate(calendar.time)
             //this means there is difference and we will get some updated new records.
-            repository.refereshAPODList(todaysDate, lastFetchDate)
+            repository.refereshAPODList(lastFetchDate, todaysDate)
 
         } else {
             repository.fetchApodListOutCome.loading(false)
