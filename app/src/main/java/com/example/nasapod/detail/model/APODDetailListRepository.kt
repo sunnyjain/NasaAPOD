@@ -1,6 +1,5 @@
 package com.example.nasapod.detail.model
 
-import android.content.SharedPreferences
 import android.util.Log
 import com.example.nasapod.commons.data.local.APODObject
 import com.example.nasapod.extensions.*
@@ -16,10 +15,9 @@ import java.util.*
 import javax.inject.Inject
 
 class APODDetailListRepository @Inject constructor(
-    private val localData: APODDetailListLocalData,
+    private val localData: APODDEtailListDataContract.Local,
     private val scheduler: Scheduler,
-    private val compositeDisposable: CompositeDisposable,
-    private val sharedPres: SharedPreferences
+    private val compositeDisposable: CompositeDisposable
 ) : APODDEtailListDataContract.Repository {
 
     override val fetchAPODDetailListOutcome = PublishSubject.create<Outcome<List<APODObject>>>()

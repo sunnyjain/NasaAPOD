@@ -2,6 +2,7 @@
 
 buildscript {
 
+
     ext.versions = [
             'minSdk'         : 16,
             'compileSdk'     : 29,
@@ -35,6 +36,7 @@ buildscript {
                     'networkInterceptor'   : "com.facebook.stetho:stetho-okhttp3:${versions.stetho}",
             ],
             test      : [
+
                     'junit'          : "junit:junit:${versions.junit}",
                     'atslRunner'     : 'androidx.test.ext:junit:1.1.0',
                     'atslRules'      : 'androidx.test:rules:1.1.0',
@@ -63,11 +65,10 @@ buildscript {
 
 
 
-
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath deps.android.plugin
