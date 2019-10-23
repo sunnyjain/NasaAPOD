@@ -4,11 +4,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion versions.compileSdk
     defaultConfig {
         applicationId "com.example.nasapod"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -22,6 +22,13 @@ android {
         }
         debug {
             buildConfigField 'String', 'BASE_URL', '"https://api.nasa.gov/"'
+        }
+    }
+
+    //For testing
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
@@ -39,19 +46,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
 
-
-
     implementation 'com.google.android.material:material:1.0.0'
 
-    //di annotation processors
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-
-    //di
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    implementation "com.google.dagger:dagger-android:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //room persistent lib
     implementation "androidx.room:room-runtime:$commonVersion"
@@ -67,8 +63,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxjava"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid"
 
-    //stetho
-    implementation 'com.facebook.stetho:stetho:1.5.0'
 
     //picasso
     implementation "com.squareup.picasso:picasso:$picassoVersion"
@@ -79,17 +73,28 @@ dependencies {
     //zommable of image.
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    //gson
-    implementation 'com.google.code.gson:gson:2.8.5'
 
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
-    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation deps.kotlin.stdlib7
 
+
+    implementation deps.google.gson
+    implementation deps.google.dagger
+    implementation deps.google.daggerAndroid
+    implementation deps.google.daggerAndroidSupport
+
+    //di annotation processors
+    kapt deps.google.daggerCompiler
+    kapt deps.google.daggerProcessor
+
+
+    implementation deps.square.picasso
+    implementation deps.square.retrofit
+    implementation deps.square.okhttp
+    implementation deps.square.gsonConverter
+    implementation deps.square.retrofitRxAdapter
+
+    implementation deps.facebook.stetho
+    implementation deps.facebook.networkInterceptor
 
 
     //Local unit tests
@@ -106,6 +111,5 @@ dependencies {
     androidTestImplementation deps.test.atslRules
     androidTestImplementation deps.test.roomTesting
     androidTestImplementation deps.test.livedataTesting
-
 
 }
